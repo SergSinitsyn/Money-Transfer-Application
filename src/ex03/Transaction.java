@@ -9,9 +9,16 @@ public class Transaction {
     private TransferСategory transferCategory;
     private double transferAmount;
 
-    public Transaction(UUID identifier, User recipient, User sender, TransferСategory transferCategory, double transferAmount) {
-        if (!checkTransferCategory(transferCategory, transferAmount)) return;
-        if (!checkTransferAmount(recipient, sender, transferCategory, transferAmount)) return;
+    public Transaction(UUID identifier, User recipient, User sender,
+                       TransferСategory transferCategory,
+                       double transferAmount) {
+        if (!checkTransferCategory(transferCategory, transferAmount)) {
+            return;
+        }
+        if (!checkTransferAmount(recipient, sender, transferCategory,
+                transferAmount)) {
+            return;
+        }
         this.identifier = identifier;
         this.recipient = recipient;
         this.sender = sender;
@@ -32,7 +39,10 @@ public class Transaction {
     }
 
     public void setRecipient(User recipient) {
-        if (!checkTransferAmount(recipient, this.sender, this.transferCategory, this.transferAmount)) return;
+        if (!checkTransferAmount(recipient, this.sender,
+                this.transferCategory, this.transferAmount)) {
+            return;
+        }
         this.recipient = recipient;
     }
 
@@ -41,7 +51,10 @@ public class Transaction {
     }
 
     public void setSender(User sender) {
-        if (!checkTransferAmount(this.recipient, sender, this.transferCategory, this.transferAmount)) return;
+        if (!checkTransferAmount(this.recipient, sender,
+                this.transferCategory, this.transferAmount)) {
+            return;
+        }
         this.sender = sender;
     }
 
@@ -50,7 +63,9 @@ public class Transaction {
     }
 
     public void setTransferCategory(TransferСategory transferCategory) {
-        if (!checkTransferCategory(transferCategory, this.transferAmount)) return;
+        if (!checkTransferCategory(transferCategory, this.transferAmount)) {
+            return;
+        }
         this.transferCategory = transferCategory;
     }
 
@@ -59,18 +74,32 @@ public class Transaction {
     }
 
     public void setTransferAmount(double transferAmount) {
-        if (!checkTransferCategory(this.transferCategory, transferAmount)) return;
+        if (!checkTransferCategory(this.transferCategory, transferAmount)) {
+            return;
+        }
         this.transferAmount = transferAmount;
     }
 
-    public boolean checkTransferCategory(TransferСategory transferCategory, double transferAmount) {
-        return ((transferCategory == TransferСategory.OUTCOME && transferAmount < 0) ||
-                (transferCategory == TransferСategory.INCOME && transferAmount > 0));
+    private boolean checkTransferCategory(TransferСategory transferCategory,
+                                          double transferAmount) {
+        return (((transferCategory == TransferСategory.OUTCOME)
+                && (transferAmount < 0))
+                || ((transferCategory == TransferСategory.INCOME)
+                && (transferAmount > 0)));
     }
 
-    public boolean checkTransferAmount(User recipient, User sender, TransferСategory transferCategory, double transferAmount) {
-        if ((transferCategory == TransferСategory.OUTCOME) && (sender.getBalance() + transferAmount > 0)) return true;
-        if ((transferCategory == TransferСategory.INCOME) && (recipient.getBalance() >= transferAmount)) return true;
+    private boolean checkTransferAmount(User recipient, User sender,
+                                        TransferСategory transferCategory,
+                                        double transferAmount) {
+        if ((transferCategory == TransferСategory.OUTCOME)
+                && (sender.getBalance() + transferAmount > 0)) {
+            return true;
+        }
+
+        if ((transferCategory == TransferСategory.INCOME)
+                && (recipient.getBalance() >= transferAmount)) {
+            return true;
+        }
         return false;
     }
 }

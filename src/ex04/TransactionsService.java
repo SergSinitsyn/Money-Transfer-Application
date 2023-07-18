@@ -1,10 +1,11 @@
 package ex04;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class TransactionsService {
 
-    UsersList userList;
+    private UsersList userList;
 
     public TransactionsService() {
         this.userList = new UsersArrayList();
@@ -18,52 +19,68 @@ public class TransactionsService {
         return userList.getUserById(userId).getBalance();
     }
 
-    public void performTransferTransaction(int senderId, int recipientId, double amount) throws UserNotFoundException, IllegalTransactionException {
-        double senderBalance = userList.getUserById(senderId).getBalance();
-        double recipientBalance = userList.getUserById(recipientId).getBalance();
+    public void performTransferTransaction(int senderId,
+                                           int recipientId,
+                                           double amount)
+            throws UserNotFoundException, IllegalTransactionException {
+
+        User sender = userList.getUserById(senderId);
+        User recipient = userList.getUserById(recipientId);
+
+        double senderBalance = sender.getBalance();
+        double recipientBalance = recipient.getBalance();
+
         if (senderBalance < amount) {
-            throw new IllegalTransactionException("Illegal transaction: " + " user " + senderId + " send to " + " user " + recipientId + " amount " + amount);
+            throw new IllegalTransactionException(
+                    "Illegal transaction: "
+                            + " user " + senderId
+                            + " send to "
+                            + " user " + recipientId
+                            + " amount " + amount);
         }
 
-        // здесть сделать генерацию id
         UUID id = TransactionIdGenerator.generateId();
-        Transaction debitTransaction = new Transaction(id, userList.getUserById(recipientId), userList.getUserById(senderId), TransferСategory.DEBIT, amount);
-        Transaction creditTransaction = new Transaction(id, userList.getUserById(senderId), userList.getUserById(recipientId), TransferСategory.CREDIT, amount);
+        userList.addTransaction(senderId,
+                new Transaction(id,
+                        sender, recipient,
+                        TransferСategory.CREDIT, -amount));
+        userList.addTransaction(recipientId,
+                new Transaction(id,
+                        recipient, sender,
+                        TransferСategory.DEBIT, amount));
 
-        userList.addTransaction(senderId, debitTransaction);
-        userList.addTransaction(recipientId, creditTransaction);
+        userList.getUserById(senderId).setBalance(senderBalance - amount);
+        userList.getUserById(recipientId).setBalance(recipientBalance + amount);
     }
 
 
-    public Transaction[] getUserTransfers(int userId) throws UserNotFoundException {
-        return userList.getUserById(userId).getTransactions().transformIntoArray();
+    public Transaction[] getUserTransfers(int userId)
+            throws UserNotFoundException {
+        return userList.getUserById(userId)
+                .getTransactions().transformIntoArray();
     }
 
-    public void removeUserTransaction(int userId, UUID transactionId) throws UserNotFoundException, TransactionNotFoundException {
-        userList.getUserById(userId).getTransactions().removeTransactionById(transactionId);
+    public void removeUserTransaction(int userId, UUID transactionId)
+            throws UserNotFoundException, TransactionNotFoundException {
+        userList.getUserById(userId).getTransactions()
+                .removeTransactionById(transactionId);
     }
 
     public Transaction[] getUnpairedTransactions() throws UserNotFoundException {
-
-        TransactionsList unpairedTransactions = new TransactionsLinkedList();
+        HashMap<UUID, Transaction> unpairedTransactions = new HashMap<>();
         for (int i = 0; i < userList.getUsersNumber(); i++) {
-            TransactionsList userTransactions = userList.getUserByIndex(i).getTransactions();
-            for (int j = 0; j < userList.getUsersNumber(); j++) {
-                if (i == j) continue;
-                Transaction[] otherUserTransaction = userList.getUserByIndex(j).getTransactions().transformIntoArray();
-                for (int k = 0; k < otherUserTransaction.length; k++) {
-                    try {
-                        userTransactions.removeTransactionById(otherUserTransaction[k].getIdentifier());
-                    } catch (TransactionNotFoundException e) {
-                    }
+            Transaction[] userTransactions =
+                    userList.getUserByIndex(i).getTransactions().transformIntoArray();
+            for (int j = 0; j < userTransactions.length; j++) {
+                UUID id = userTransactions[j].getIdentifier();
+                if (unpairedTransactions.containsKey(id)) {
+                    unpairedTransactions.remove(id);
+                } else {
+                    unpairedTransactions.put(id, userTransactions[j]);
                 }
             }
-            Transaction[] unpairedUserTransactions = userTransactions.transformIntoArray();
-            for (int l = 0; l < unpairedUserTransactions.length; l++) {
-                unpairedTransactions.addTransaction(unpairedUserTransactions[l]);
-            }
         }
-        return unpairedTransactions.transformIntoArray();
+        return unpairedTransactions.values().toArray(new Transaction[0]);
     }
 }
 

@@ -1,6 +1,5 @@
 package ex01;
 
-
 public class Program {
 
     public static void main(String[] args) {
@@ -15,7 +14,10 @@ public class Program {
         printUser(bob2);
     }
 
-    public static void printUser(User user) {
-        System.out.println("name: " + user.getName() + ", id: " + user.getIdentifier() + ", balance: " + user.getBalance());
+
+    private static void printUser(User user) {
+        System.out.println("name: " + user.getName()
+                + ", id: " + user.getIdentifier()
+                + ", balance: " + user.getBalance());
     }
 }

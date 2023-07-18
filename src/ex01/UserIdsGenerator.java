@@ -1,7 +1,6 @@
 package ex01;
 
 public class UserIdsGenerator {
-
     private static UserIdsGenerator instance;
     private int lastGeneratedID;
 
@@ -12,12 +11,11 @@ public class UserIdsGenerator {
         return instance;
     }
 
-    private UserIdsGenerator() {
-        lastGeneratedID = 0;
-    }
-
     public int generateId() {
         return ++lastGeneratedID;
     }
 
+    private UserIdsGenerator() {
+        lastGeneratedID = 0;
+    }
 }

@@ -6,9 +6,11 @@ public class User {
     private double balance;
 
     public User(String name, double balance) {
-        if (balance < 0) return;
         this.identifier = UserIdsGenerator.getInstance().generateId();
         this.name = name;
+        if (balance < 0) {
+            return;
+        }
         this.balance = balance;
     }
 
@@ -29,7 +31,9 @@ public class User {
     }
 
     public void setBalance(double balance) {
-        if (balance < 0) return;
+        if (balance < 0) {
+            return;
+        }
         this.balance = balance;
     }
 }

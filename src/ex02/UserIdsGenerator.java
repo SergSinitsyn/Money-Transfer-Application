@@ -1,7 +1,6 @@
 package ex02;
 
 public class UserIdsGenerator {
-
     private static UserIdsGenerator instance;
     private int lastGeneratedID;
 

@@ -22,21 +22,26 @@ public class TransactionsLinkedList implements TransactionsList {
 
     }
 
-    public void removeTransactionById(UUID transactionId) throws TransactionNotFoundException {
+    public void removeTransactionById(UUID transactionId)
+            throws TransactionNotFoundException {
         if (head == null) {
-            throw new TransactionNotFoundException("transaction with non-existent ID" + transactionId);
+            throw new TransactionNotFoundException(
+                    "transaction with non-existent ID" + transactionId);
         }
 
         if (head.getTransaction().getIdentifier().equals(transactionId)) {
             head = head.getNext();
         } else {
             TransactionNode currentNode = head;
-            while (currentNode.getNext() != null && !currentNode.getNext().getTransaction().getIdentifier().equals(transactionId)) {
+            while ((currentNode.getNext() != null)
+                    && (!currentNode.getNext().getTransaction()
+                    .getIdentifier().equals(transactionId))) {
                 currentNode = currentNode.getNext();
             }
 
             if (currentNode.getNext() == null) {
-                throw new TransactionNotFoundException("transaction with non-existent ID" + transactionId);
+                throw new TransactionNotFoundException(
+                        "transaction with non-existent ID" + transactionId);
             }
 
             currentNode.setNext(currentNode.getNext().getNext());

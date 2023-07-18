@@ -6,7 +6,8 @@ public interface TransactionsList {
 
     public void addTransaction(Transaction transaction);
 
-    public void removeTransactionById(UUID transactionId) throws TransactionNotFoundException;
+    public void removeTransactionById(UUID transactionId)
+            throws TransactionNotFoundException;
 
     public Transaction[] transformIntoArray();
 

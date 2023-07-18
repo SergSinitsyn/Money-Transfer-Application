@@ -10,5 +10,6 @@ public interface UsersList {
 
     int getUsersNumber();
 
-    public void addTransaction(int userId, Transaction transaction) throws UserNotFoundException;
+    public void addTransaction(int userId, Transaction transaction)
+            throws UserNotFoundException;
 }
