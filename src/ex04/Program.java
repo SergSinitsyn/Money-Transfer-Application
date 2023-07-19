@@ -77,15 +77,11 @@ public class Program {
         }
 
         System.out.println("\nUnpaired transactions");
-        try {
-            Transaction[] unpairedTransactions = transactionsService.
-                    getUnpairedTransactions();
-            for (int i = 0; i < transactionsService.
-                    getUnpairedTransactions().length; i++) {
-                System.out.println(unpairedTransactions[i].getIdentifier());
-            }
-        } catch (UserNotFoundException e) {
-            throw new RuntimeException(e);
+        Transaction[] unpairedTransactions = transactionsService.
+                getUnpairedTransactions();
+        for (int i = 0; i < transactionsService.
+                getUnpairedTransactions().length; i++) {
+            System.out.println(unpairedTransactions[i].getIdentifier());
         }
     }
 
