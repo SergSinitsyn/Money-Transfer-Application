@@ -57,14 +57,14 @@ public class Menu {
                     if (isDevMode()) {
                         removeTransferByID(scanner);
                     } else {
-                        System.out.println("Invalid choice. Please try again.");
+                        System.out.println("Unavailable in standard mode.");
                     }
                     break;
                 case 6:
                     if (isDevMode()) {
                         checkTransferValidity();
                     } else {
-                        System.out.println("Invalid choice. Please try again.");
+                        System.out.println("Unavailable in standard mode.");
                     }
                     break;
                 case 7:

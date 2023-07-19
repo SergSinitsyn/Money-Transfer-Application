@@ -21,11 +21,11 @@ public class Program {
                 menu.displayMenu(false);
             } else if (mode.equals("dev")) {
                 menu.displayMenu(true);
+            } else {
+                System.out.println("Select the mode: production or dev");
             }
         } else {
-            System.out.println("Select the mode: production or dev");
+            System.out.println("Select the mode: --profile=production or --profile=dev");
         }
-
-
     }
 }
