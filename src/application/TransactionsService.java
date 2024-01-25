@@ -47,7 +47,7 @@ public class TransactionsService {
             throw new IllegalTransactionException(
                     "Illegal transaction: "
                             + " user " + senderId
-                            + " send to "
+                            + " send to"
                             + " user " + recipientId
                             + " amount " + amount);
         }
